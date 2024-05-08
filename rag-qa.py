@@ -1,8 +1,8 @@
 from haystack import Pipeline
-from haystack.components.fetchers import LinkContentFetcher
-from haystack.components.converters import HTMLToDocument
-from haystack.components.generators import OpenAIGenerator
 from haystack.components.builders import PromptBuilder
+from haystack.components.converters import HTMLToDocument
+from haystack.components.fetchers import LinkContentFetcher
+from haystack_integrations.components.generators.nvidia import NvidiaGenerator
 
 fetcher = LinkContentFetcher()
 converter = HTMLToDocument()
@@ -12,7 +12,11 @@ Context:
 Question: {{ query }}
 Answer:"""
 prompt_builder = PromptBuilder(template=prompt)
-generator = OpenAIGenerator()
+generator = NvidiaGenerator(
+    model="llama-2-7b",
+    api_url="http://localhost:9999",
+    api_key=None,
+)
 
 rag = Pipeline()
 rag.add_component("fetcher", fetcher)
@@ -26,6 +30,10 @@ rag.connect("prompt", "generator")
 
 while True:
     question = input("Ask a question:\n")
-    result = rag.run({"fetcher": {"urls": ["https://haystack.deepset.ai/integrations/nvidia"]},
-                      "prompt": {"query": question}})
+    result = rag.run(
+        {
+            "fetcher": {"urls": ["https://haystack.deepset.ai/integrations/nvidia"]},
+            "prompt": {"query": question},
+        }
+    )
     print(result["generator"]["replies"][0])
