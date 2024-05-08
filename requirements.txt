@@ -1,3 +1,4 @@
 haystack-ai
 chroma-haystack
+git+https://github.com/deepset-ai/haystack-core-integrations.git#egg=nvidia-haystack&subdirectory=integrations/nvidia
 pydantic==1.9.0
