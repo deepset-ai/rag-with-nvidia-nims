@@ -13,9 +13,11 @@ Question: {{ query }}
 Answer:"""
 prompt_builder = PromptBuilder(template=prompt)
 generator = NvidiaGenerator(
-    model="llama-2-7b",
-    api_url="http://localhost:9999",
-    api_key=None,
+    model="google/gemma-7b",
+    api_url="https://integrate.api.nvidia.com/v1",
+    model_arguments={
+        "max_tokens": 1024
+    }
 )
 
 rag = Pipeline()
