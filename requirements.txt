@@ -1,0 +1,3 @@
+haystack-ai
+chroma-haystack
+pydantic==1.9.0
