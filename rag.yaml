@@ -1,0 +1,88 @@
+components:
+  embedder:
+    init_parameters:
+      api_key:
+        env_vars:
+        - NVIDIA_EMBEDDINGS_KEY
+        strict: true
+        type: env_var
+      api_url: https://ai.api.nvidia.com/v1/retrieval/snowflake/arctic-embed-l
+      model: snowflake/arctic-embed-l
+      prefix: ''
+      suffix: ''
+      truncate: null
+    type: haystack_integrations.components.embedders.nvidia.text_embedder.NvidiaTextEmbedder
+  generator:
+    init_parameters:
+      api_key:
+        env_vars:
+        - NVIDIA_API_KEY
+        strict: true
+        type: env_var
+      api_url: https://integrate.api.nvidia.com/v1
+      model: meta/llama3-70b-instruct
+      model_arguments:
+        max_tokens: 1024
+    type: haystack_integrations.components.generators.nvidia.generator.NvidiaGenerator
+  prompt:
+    init_parameters:
+      template: "Answer the question given the context.\nQuestion: {{ query }}\nContext:\n\
+        {% for document in documents %}\n    {{ document.content }}\n{% endfor %}\n\
+        Answer:"
+    type: haystack.components.builders.prompt_builder.PromptBuilder
+  retriever:
+    init_parameters:
+      document_store:
+        init_parameters:
+          api_key: null
+          content_field: content
+          duplicate_documents: overwrite
+          embedding_dim: 1024
+          embedding_field: embedding
+          grpc_port: 6334
+          hnsw_config: null
+          host: qdrant
+          https: null
+          index: Document
+          init_from: null
+          location: null
+          metadata: {}
+          name_field: name
+          on_disk: false
+          on_disk_payload: null
+          optimizers_config: null
+          path: null
+          payload_fields_to_index: null
+          port: 6333
+          prefer_grpc: false
+          prefix: null
+          progress_bar: true
+          quantization_config: null
+          recreate_index: false
+          replication_factor: null
+          return_embedding: false
+          scroll_size: 10000
+          shard_number: null
+          similarity: cosine
+          timeout: null
+          url: null
+          use_sparse_embeddings: false
+          wait_result_from_api: true
+          wal_config: null
+          write_batch_size: 100
+          write_consistency_factor: null
+        type: haystack_integrations.document_stores.qdrant.document_store.QdrantDocumentStore
+      filters: null
+      return_embedding: false
+      scale_score: true
+      top_k: 10
+    type: haystack_integrations.components.retrievers.qdrant.retriever.QdrantEmbeddingRetriever
+connections:
+- receiver: retriever.query_embedding
+  sender: embedder.embedding
+- receiver: prompt.documents
+  sender: retriever.documents
+- receiver: generator.prompt
+  sender: prompt.prompt
+max_loops_allowed: 100
+metadata: {}

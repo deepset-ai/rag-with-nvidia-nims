@@ -1,28 +1,36 @@
 from haystack import Pipeline
-from haystack.components.fetchers import LinkContentFetcher
-from haystack.components.converters import HTMLToDocument
+from haystack.utils.auth import Secret
+from haystack.components.converters import PyPDFToDocument
 from haystack.components.writers import DocumentWriter
 from haystack.components.preprocessors import DocumentCleaner, DocumentSplitter
-from haystack_integrations.document_stores.chroma import ChromaDocumentStore
-from haystack.components.embedders import OpenAIDocumentEmbedder
+from haystack_integrations.document_stores.qdrant import QdrantDocumentStore
+from haystack_integrations.components.embedders.nvidia import NvidiaDocumentEmbedder
 
-document_store = ChromaDocumentStore(persist_path="chroma.db")
+document_store = QdrantDocumentStore(embedding_dim=1024)
 
-fetcher = LinkContentFetcher()
-converter = HTMLToDocument()
+converter = PyPDFToDocument()
+
 cleaner = DocumentCleaner()
-splitter = DocumentSplitter()
-embedder = OpenAIDocumentEmbedder()
+
+splitter = DocumentSplitter(split_by='word', split_length=100)
+
+embedder = NvidiaDocumentEmbedder(model="snowflake/arctic-embed-l", 
+                                  api_key=Secret.from_env_var("NVIDIA_EMBEDDINGS_KEY"), 
+                                  api_url="https://ai.api.nvidia.com/v1/retrieval/snowflake/arctic-embed-l",
+                                  batch_size=1)
+
 writer = DocumentWriter(document_store)
 
 indexing = Pipeline()
-indexing.add_component("fetcher", fetcher)
 indexing.add_component("converter", converter)
+indexing.add_component("cleaner", cleaner)
+indexing.add_component("splitter", splitter)
 indexing.add_component("embedder", embedder)
 indexing.add_component("writer", writer)
 
-indexing.connect("fetcher", "converter")
-indexing.connect("converter", "embedder")
+indexing.connect("converter", "cleaner")
+indexing.connect("cleaner", "splitter")
+indexing.connect("splitter", "embedder")
 indexing.connect("embedder", "writer")
 
-indexing.run({"fetcher": {"urls": ["https://docs.haystack.deepset.ai/docs/pypdftodocument"]}})
+indexing.run({"converter": {"sources": ["./ChipNeMo.pdf"]}})
