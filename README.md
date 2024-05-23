@@ -5,7 +5,7 @@
 > These models are already available and you can use them by creating yourself API keys through the platform.
 > The project is set up so that you can change these models to NIM deployments by setting the `model` name and `api_url` in the `NvidiaGenerator`, `NvidiaDocumentEmbedder` and `NvidiaTextEmbedder` components.
 > 
-> We also provide a notebook on Haystack Cookbooks that provide the same code and setup, only expecting self-hosted NIMs
+> 👩🏻‍🍳 We also provide a notebook on Haystack Cookbooks that provide the same code and setup, only expecting self-hosted NIMs
 > 
 > <a href="https://colab.research.google.com/github/deepset-ai/haystack-cookbook/blob/main/notebooks/rag-with-nims.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
 
