@@ -6,7 +6,7 @@ from haystack.components.preprocessors import DocumentCleaner, DocumentSplitter
 from haystack_integrations.document_stores.qdrant import QdrantDocumentStore
 from haystack_integrations.components.embedders.nvidia import NvidiaDocumentEmbedder
 
-document_store = QdrantDocumentStore(embedding_dim=1024)
+document_store = QdrantDocumentStore(embedding_dim=1024, host="qdrant")
 
 converter = PyPDFToDocument()
 
@@ -33,4 +33,5 @@ indexing.connect("cleaner", "splitter")
 indexing.connect("splitter", "embedder")
 indexing.connect("embedder", "writer")
 
-indexing.run({"converter": {"sources": ["./ChipNeMo.pdf"]}})
+if __name__=="__main__":
+    indexing.run({"converter": {"sources": ["/hayhooks/ChipNeMo.pdf"]}})

@@ -14,11 +14,20 @@ services:
       - ./qdrant_data:/qdrant_data
 
   hayhooks:
-    image: deepset/hayhooks:main
+    build: .
     container_name: hayhooks
     ports:
       - "1416:1416"
-    volumes:
-      - ./pipelines:/pipelines
     env_file:
       - ".env"
+
+  qdrant-setup:
+    build: .
+    container_name: qdrant-setup
+    depends_on: 
+      - qdrant
+    env_file:
+      - ".env"
+    volumes:
+      - .:/hayhooks/
+    entrypoint: ["python", "/hayhooks/indexing.py"]

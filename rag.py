@@ -6,11 +6,11 @@ from haystack_integrations.components.generators.nvidia import NvidiaGenerator
 from haystack_integrations.components.retrievers.qdrant import QdrantEmbeddingRetriever
 from haystack_integrations.document_stores.qdrant import QdrantDocumentStore
 
-document_store = QdrantDocumentStore(embedding_dim=1024, host="qdrant")
+document_store = QdrantDocumentStore(embedding_dim=1024)
 
 embedder = NvidiaTextEmbedder(model="snowflake/arctic-embed-l", 
-                                  api_key=Secret.from_env_var("NVIDIA_EMBEDDINGS_KEY"), 
-                                  api_url="https://ai.api.nvidia.com/v1/retrieval/snowflake/arctic-embed-l")
+                              api_key=Secret.from_env_var("NVIDIA_EMBEDDINGS_KEY"), 
+                              api_url="https://ai.api.nvidia.com/v1/retrieval/snowflake/arctic-embed-l")
 
 retriever = QdrantEmbeddingRetriever(document_store=document_store)
 
