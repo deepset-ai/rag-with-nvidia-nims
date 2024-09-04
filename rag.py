@@ -24,7 +24,7 @@ Answer:"""
 prompt_builder = PromptBuilder(template=prompt)
 
 generator = NvidiaGenerator(
-    model="meta/llama3-70b-instruct",
+    model="meta/llama-3.1-70b-instruct",
     api_url="https://integrate.api.nvidia.com/v1",
     model_arguments={
         "max_tokens": 1024
