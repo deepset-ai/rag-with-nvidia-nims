@@ -15,7 +15,6 @@ cleaner = DocumentCleaner()
 splitter = DocumentSplitter(split_by='word', split_length=100)
 
 embedder = NvidiaDocumentEmbedder(model="snowflake/arctic-embed-l", 
-                                  api_key=Secret.from_env_var("NVIDIA_EMBEDDINGS_KEY"), 
                                   api_url="https://ai.api.nvidia.com/v1/retrieval/snowflake/arctic-embed-l",
                                   batch_size=1)
 

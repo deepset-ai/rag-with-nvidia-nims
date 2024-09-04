@@ -3,7 +3,7 @@ components:
     init_parameters:
       api_key:
         env_vars:
-        - NVIDIA_EMBEDDINGS_KEY
+        - NVIDIA_API_KEY
         strict: true
         type: env_var
       api_url: https://ai.api.nvidia.com/v1/retrieval/snowflake/arctic-embed-l

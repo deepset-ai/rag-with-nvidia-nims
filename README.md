@@ -14,10 +14,10 @@
 ## Run with Docker
 
 1. `pip install -r requirements.txt`
-2. Create a `.env` file and add `NVIDIA_API_KEY` (if you're using hosted models via https://build.nvidia.com/ then add an extra `NVIDIA_EMBEDDINGS_KEY` for embedding models)
+2. Create a `.env` file and add `NVIDIA_API_KEY` (if you're using hosted models via https://build.nvidia.com/)
 3. `docker-compose up`
 6. `hayhooks deploy rag.yaml`
-7. Go to `localhost:6333/dashboard` to interact with your RAG pipeline
+7. Go to `localhost:1416/docs` to interact with your RAG pipeline
 
 ## File Structure
 
